@@ -2472,8 +2472,8 @@ D. Theo thứ tự được sắp xếp
 Câu 77. Mô hình dịch vụ tích hợp cung cấp các dịch vụ gì cho người dùng?
 A. Dịch vụ đa phương tiện
 B. Dịch vụ tích hợp dữ liệu và thoại
-C. Tất cả các phương án trên
-*D. Dịch vụ đa dạng như truyền thông, video, và dữ liệu
+*C. Tất cả các phương án trên
+D. Dịch vụ đa dạng như truyền thông, video, và dữ liệu
 
 Câu 78. Mô hình dịch vụ phân biệt trong mạng là gì?
 A. Một mô hình mà tất cả các dịch vụ được xử lý một cách như nhau
