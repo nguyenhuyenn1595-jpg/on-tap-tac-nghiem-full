@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Ôn Tập Trắc Nghiệm 2.0</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; padding: 20px; margin: 0; color: #333; }
+        .container { background: white; width: 100%; max-width: 800px; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        
+        /* CSS cho Menu */
+        h1 { text-align: center; color: #1a73e8; margin-bottom: 20px; }
+        h2.subject-title { color: #202124; border-bottom: 2px solid #1a73e8; padding-bottom: 10px; margin-top: 30px; font-size: 20px; }
+        .menu-list { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+        .menu-card { background: #fff; border: 2px solid #e8eaed; padding: 20px; border-radius: 10px; cursor: pointer; transition: 0.2s; text-align: center; }
+        .menu-card:hover { border-color: #1a73e8; box-shadow: 0 4px 10px rgba(26,115,232,0.1); transform: translateY(-2px); }
+        .menu-card h3 { margin: 0 0 10px 0; color: #202124; font-size: 16px; }
+        .menu-card p { margin: 0; font-size: 13px; color: #5f6368; }
+        
+        /* Nút gạt xáo trộn */
+        .settings-bar { display: flex; justify-content: flex-end; align-items: center; margin-bottom: 20px; background: #e8f0fe; padding: 10px 20px; border-radius: 8px; }
+        .switch { position: relative; display: inline-block; width: 46px; height: 24px; margin-left: 10px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 24px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: #1a73e8; }
+        input:checked + .slider:before { transform: translateX(22px); }
+
+        /* CSS cho phần làm bài */
+        #quiz-screen, #result-screen { display: none; }
+        .question-text { font-size: 20px; font-weight: 600; margin-bottom: 20px; line-height: 1.5; }
+        .option { display: block; width: 100%; text-align: left; padding: 15px 20px; margin-bottom: 12px; background: #fff; border: 2px solid #e8eaed; border-radius: 8px; font-size: 16px; cursor: pointer; transition: 0.2s; color: #333; }
+        .option:hover { background: #f8f9fa; border-color: #dadce0; }
+        .option.correct { background: #e6f4ea; border-color: #34a853; color: #137333; font-weight: bold; }
+        .option.wrong { background: #fce8e6; border-color: #ea4335; color: #c5221f; font-weight: bold; }
+        .footer { display: flex; justify-content: space-between; align-items: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e8eaed; }
+        .btn { background: #1a73e8; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; font-weight: 500; cursor: pointer; transition: 0.2s; }
+        .btn:hover { background: #1557b0; }
+        
+        /* CSS cho kết quả */
+        #result-screen { text-align: center; padding: 20px; }
+        .score-circle { width: 150px; height: 150px; border-radius: 50%; background: #e8f0fe; display: flex; justify-content: center; align-items: center; margin: 0 auto 20px auto; font-size: 32px; font-weight: bold; color: #1a73e8; }
+        .result-actions { display: flex; justify-content: center; gap: 15px; margin-top: 30px; }
+        .btn-secondary { background: #fff; color: #1a73e8; border: 2px solid #1a73e8; }
+        .btn-secondary:hover { background: #e8f0fe; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Màn hình Menu -->
+    <div id="menu-screen">
+        <h1>App Ôn Tập Trắc Nghiệm</h1>
+                <div class="settings-bar" style="flex-direction: column; align-items: flex-start; gap: 15px;">
+            <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+                <span style="font-weight: 500; color: #1a73e8;">Xáo trộn vị trí đáp án (A, B, C, D)</span>
+                <label class="switch">
+                    <input type="checkbox" id="shuffle-options-toggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+                <span style="font-weight: 500; color: #1a73e8;">Xáo trộn thứ tự câu hỏi</span>
+                <label class="switch">
+                    <input type="checkbox" id="shuffle-questions-toggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+        <div id="subjects-container">
+            <!-- Các môn và bài học sẽ được sinh ra ở đây -->
+        </div>
+    </div>
+
+    <!-- Màn hình làm bài -->
+    <div id="quiz-screen">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+            <span style="cursor: pointer; color: #1a73e8; font-weight: bold;" onclick="goHome()">← Thoát</span>
+            <span class="progress" id="quiz-title" style="font-weight: bold; color: #5f6368;"></span>
+            <span class="progress">Câu: <span id="current-q">1</span> / <span id="total-q">0</span></span>
+        </div>
+        <div class="question-text" id="question-text"></div>
+        <div id="options-container"></div>
+                        <div class="footer">
+            <div style="width: 140px; text-align: left;">
+                <button class="btn" id="prev-btn" style="display: none; width: 130px; padding: 10px 0; text-align: center;">← Câu trước</button>
+            </div>
+            
+            <div style="color: #5f6368; text-align: center;">Điểm: <strong id="current-score" style="color: #34a853;">0</strong></div>
+            
+            <div style="width: 140px; text-align: right;">
+                <button class="btn" id="next-btn" style="display: none; width: 130px; padding: 10px 0; text-align: center;">Tiếp theo →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Màn hình kết quả -->
+    <div id="result-screen">
+        <h2>Hoàn Thành Bài Thi!</h2>
+<h3 id="result-quiz-title" style="color: #1a73e8; margin-top: -10px; margin-bottom: 20px; font-weight: 500;"></h3>
+        <div class="score-circle" id="final-score">0/0</div>
+        <p style="font-size: 18px; color: #5f6368;" id="result-msg"></p>
+        <div class="result-actions">
+            <button class="btn btn-secondary" onclick="goHome()">Về Trang Chủ</button>
+            <button class="btn" id="retry-wrong-btn" style="display: none;">Ôn Lại Câu Sai</button>
+            <button class="btn" id="retry-all-btn">Làm Lại Từ Đầu</button>
+        </div>
+    </div>
+</div>
+
+<script src="data.js"></script>
+<script>
+    let currentQuestions = [];
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let canAnswer = true;
+    let wrongQuestions = []; 
+    let currentQuizId = "";  
+    
+    let isShuffleOptions = false;
+     let savedScrollPosition = 0;
+    let isShuffleQuestions = false;
+
+    let userAnswers = []; 
+    let shuffledQuestionsForQuiz = []; 
+
+    const qTextEl = document.getElementById('question-text');
+    const optionsEl = document.getElementById('options-container');
+    const nextBtn = document.getElementById('next-btn');
+    const prevBtn = document.getElementById('prev-btn');
+    const currentQEl = document.getElementById('current-q');
+    const totalQEl = document.getElementById('total-q');
+
+    // Lắng nghe 2 nút gạt
+    document.getElementById('shuffle-options-toggle').addEventListener('change', (e) => {
+        isShuffleOptions = e.target.checked;
+    });
+    document.getElementById('shuffle-questions-toggle').addEventListener('change', (e) => {
+        isShuffleQuestions = e.target.checked;
+    });
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function loadMenu() {
+        const container = document.getElementById('subjects-container');
+        container.innerHTML = '';
+        
+        subjectsData.forEach(subject => {
+            const subjectTitle = document.createElement('h2');
+            subjectTitle.className = 'subject-title';
+            subjectTitle.innerText = subject.name;
+            container.appendChild(subjectTitle);
+
+            const listDiv = document.createElement('div');
+            listDiv.className = 'menu-list';
+
+            subject.quizzes.forEach(quiz => {
+                const savedScore = localStorage.getItem(`score_${quiz.id}`);
+                const card = document.createElement('div');
+                card.className = 'menu-card';
+                card.onclick = () => startQuiz(subject, quiz.id);
+                card.innerHTML = `
+                    <h3>${quiz.title}</h3>
+                    <p>${savedScore ? `Điểm gần nhất: ${savedScore}` : 'Chưa làm lần nào'}</p>
+                `;
+                listDiv.appendChild(card);
+            });
+            container.appendChild(listDiv);
+        });
+    }
+
+    function findQuiz(id) {
+        for(let subject of subjectsData) {
+            for(let quiz of subject.quizzes) {
+                if(quiz.id === id) return quiz;
+            }
+        }
+        return null;
+    }
+
+    function startQuiz(subject, id, isRetryWrong = false) {
+        savedScrollPosition = window.scrollY;
+        document.getElementById('menu-screen').style.display = 'none';
+        document.getElementById('result-screen').style.display = 'none';
+        document.getElementById('quiz-screen').style.display = 'block';
+
+        if (!isRetryWrong) {
+            currentQuizId = id;
+            const quiz = findQuiz(id);
+            
+            // Lấy dữ liệu gốc từ file data.js (đảm bảo không bị biến dạng)
+            currentQuestions = parseQuestions(quiz.data); 
+            document.getElementById('quiz-title').innerText = quiz.title;
+            wrongQuestions = []; 
+            userAnswers = []; 
+
+            // TIẾN HÀNH XÁO TRỘN (Nếu được bật)
+            let tempQuestions = [...currentQuestions]; // Copy mảng gốc
+
+            // 1. Xáo trộn thứ tự câu hỏi (nếu bật)
+            if (isShuffleQuestions) {
+                tempQuestions = shuffleArray(tempQuestions);
+            }
+
+            // 2. Xáo trộn đáp án A, B, C, D (nếu bật)
+            if (isShuffleOptions) {
+                shuffledQuestionsForQuiz = tempQuestions.map(q => {
+                    let correctAnswerText = q.options[q.correct];
+                    let shuffledOptions = shuffleArray([...q.options]);
+                    return {
+                        question: q.question,
+                        options: shuffledOptions,
+                        correct: shuffledOptions.indexOf(correctAnswerText)
+                    };
+                });
+            } else {
+                shuffledQuestionsForQuiz = tempQuestions;
+            }
+        }
+        
+        currentQuestionIndex = 0;
+        score = 0;
+        document.getElementById('current-score').innerText = score;
+        
+        loadQuestion();
+    }
+
+    function parseQuestions(text) {
+        const questions = [];
+        const blocks = text.split(/Câu\s*\d+[:.]?\s*/i).filter(b => b.trim() !== "");
+        blocks.forEach((block) => {
+            const lines = block.trim().split('\n').map(l => l.trim()).filter(l => l !== "");
+            if (lines.length < 5) return; 
+            const qText = lines[0];
+            let options = [];
+            let correctIndex = 0;
+            for (let i = 1; i < lines.length; i++) {
+                let line = lines[i];
+                if (/^\*?[A-D]\./i.test(line)) {
+                    if (line.startsWith('*')) {
+                        correctIndex = options.length;
+                        line = line.substring(1).trim(); 
+                    }
+                    options.push(line);
+                }
+            }
+            if (options.length >= 2) {
+                questions.push({ question: qText, options: options, correct: correctIndex });
+            }
+        });
+        return questions;
+    }
+
+    function loadQuestion() {
+        canAnswer = true;
+        nextBtn.style.display = 'none';
+        
+        if (currentQuestionIndex > 0) {
+            prevBtn.style.display = 'block';
+        } else {
+            prevBtn.style.display = 'none';
+        }
+        
+        // Lấy câu hỏi từ mảng đã xử lý (xáo trộn hoặc gốc)
+        let q = shuffledQuestionsForQuiz[currentQuestionIndex];
+        // Lấy câu hỏi gốc tương ứng để lưu vào danh sách câu sai
+        let originalQ = currentQuestions.find(origQ => origQ.question === q.question) || q;
+
+        qTextEl.innerText = q.question;
+        currentQEl.innerText = currentQuestionIndex + 1;
+        totalQEl.innerText = currentQuestions.length;
+
+        optionsEl.innerHTML = '';
+        const letters = ['A. ', 'B. ', 'C. ', 'D. '];
+        
+        const previousAnswerIndex = userAnswers[currentQuestionIndex];
+        const isAnswered = previousAnswerIndex !== undefined;
+
+        if (isAnswered) {
+            canAnswer = false; 
+            nextBtn.style.display = 'block'; 
+        }
+
+        q.options.forEach((opt, index) => {
+            const btn = document.createElement('button');
+            btn.className = 'option';
+            let cleanOpt = opt.replace(/^[A-D]\.\s*/i, ''); 
+            btn.innerText = letters[index] + cleanOpt;
+            
+            if (isAnswered) {
+                if (index === q.correct) {
+                    btn.classList.add('correct'); 
+                } else if (index === previousAnswerIndex) {
+                    btn.classList.add('wrong'); 
+                }
+            } else {
+                btn.onclick = () => selectOption(index, btn, q, originalQ);
+            }
+            
+            optionsEl.appendChild(btn);
+        });
+    }
+
+    function selectOption(selectedIndex, btnElement, q, originalQ) {
+        if (!canAnswer) return;
+        canAnswer = false;
+
+        userAnswers[currentQuestionIndex] = selectedIndex;
+
+        const allBtns = document.querySelectorAll('.option');
+
+        if (selectedIndex === q.correct) {
+            btnElement.classList.add('correct');
+            score++;
+            document.getElementById('current-score').innerText = score;
+        } else {
+            btnElement.classList.add('wrong');
+            allBtns[q.correct].classList.add('correct'); 
+            wrongQuestions.push(originalQ); 
+        }
+
+        nextBtn.style.display = 'block';
+    }
+
+    nextBtn.onclick = () => {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < currentQuestions.length) {
+            loadQuestion();
+        } else {
+            showResult();
+        }
+    };
+
+    prevBtn.onclick = () => {
+        if (currentQuestionIndex > 0) {
+            currentQuestionIndex--;
+            loadQuestion();
+        }
+    };
+
+        // Hiển thị kết quả
+    function showResult() {
+        document.getElementById('quiz-screen').style.display = 'none';
+        document.getElementById('result-screen').style.display = 'block';
+        
+        // LẤY TÊN BÀI HỌC VÀ HIỂN THỊ LÊN MÀN HÌNH KẾT QUẢ
+        const currentQuiz = findQuiz(currentQuizId);
+        if (currentQuiz) {
+            document.getElementById('result-quiz-title').innerText = currentQuiz.title;
+        }
+
+        document.getElementById('final-score').innerText = `${score}/${currentQuestions.length}`;
+        const savedScore = localStorage.getItem(`score_${currentQuizId}`);
+        if (!savedScore || score > parseInt(savedScore.split('/')[0])) {
+            localStorage.setItem(`score_${currentQuizId}`, `${score}/${currentQuestions.length}`);
+        }
+
+        let msg = "";
+        if (score === currentQuestions.length) msg = "Tuyệt vời! Bạn đã làm đúng tất cả.";
+        else if (score >= currentQuestions.length / 2) msg = "Khá tốt! Hãy xem lại các câu sai nhé.";
+        else msg = "Cần cố gắng thêm! Hãy ôn lại bài.";
+        document.getElementById('result-msg').innerText = msg;
+
+        const retryWrongBtn = document.getElementById('retry-wrong-btn');
+        if (wrongQuestions.length > 0) {
+            retryWrongBtn.style.display = 'block';
+            retryWrongBtn.onclick = () => {
+                currentQuestions = wrongQuestions; 
+                
+                // Khi ôn lại câu sai, áp dụng lại cài đặt xáo trộn hiện tại
+                let tempQuestions = [...currentQuestions];
+                if (isShuffleQuestions) tempQuestions = shuffleArray(tempQuestions);
+
+                if (isShuffleOptions) {
+                    shuffledQuestionsForQuiz = tempQuestions.map(q => {
+                        let correctAnswerText = q.options[q.correct];
+                        let shuffledOptions = shuffleArray([...q.options]);
+                        return {
+                            question: q.question,
+                            options: shuffledOptions,
+                            correct: shuffledOptions.indexOf(correctAnswerText)
+                        };
+                    });
+                } else {
+                    shuffledQuestionsForQuiz = tempQuestions;
+                }
+
+                userAnswers = []; 
+                startQuiz(null, currentQuizId, true);
+            };
+        } else {
+            retryWrongBtn.style.display = 'none';
+        }
+
+        document.getElementById('retry-all-btn').onclick = () => {
+            startQuiz(null, currentQuizId);
+        };
+    }
+
+        function goHome() {
+        document.getElementById('quiz-screen').style.display = 'none';
+        document.getElementById('result-screen').style.display = 'none';
+        document.getElementById('menu-screen').style.display = 'block';
+        
+        // Khôi phục lại vị trí cuộn
+        window.scrollTo({
+            top: savedScrollPosition,
+            behavior: 'instant' // hoặc 'smooth' nếu bạn muốn nó cuộn từ từ
+        });
+        
+        loadMenu(); 
+    }
+
+    loadMenu();
+</script>
+</body>
+</html>
