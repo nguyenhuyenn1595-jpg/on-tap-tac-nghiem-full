@@ -2573,8 +2573,8 @@ D. Real-time Transport Protocol (RTP)
 
 Câu 95. Mô hình dịch vụ phân biệt có thể giúp giải quyết vấn đề gì trong mạng?
 A. Tăng băng thông
-B. Tăng hiệu suất mạng
-*C. Tất cả các phương án
+*B. Tăng hiệu suất mạng
+C. Tất cả các phương án
 D. Tăng trễ mạng
 
 Câu 96. Mục đích chính của mô hình dịch vụ phân biệt là gì?
@@ -2608,10 +2608,10 @@ C. Tăng dung lượng lưu trữ
 *D. Xác định và sửa chữa các vấn đề hiệu suất trước khi chúng ảnh hưởng đến người dùng
 
 Câu 101. Trong đánh giá thống kê kết quả mô phỏng, phân tích phân phối xác suất của băng thông có thể được sử dụng để làm gì?
-*A. Xác định ảnh hưởng của băng thông đến độ trễ mạng
+A. Xác định ảnh hưởng của băng thông đến độ trễ mạng
 B. Phân loại các loại lưu lượng mạng
 C. Đánh giá hiệu suất mạng
-D. Xác định tần suất sử dụng băng thông của mạng
+*D. Xác định tần suất sử dụng băng thông của mạng
 
 Câu 102. Dữ liệu nào sẽ xác định tốc độ mô phỏng của NS2?
 A. Số lượng thiết bị trong mạng
@@ -2705,8 +2705,8 @@ D. Tất cả các phương án
 
 Câu 117. Việc đánh giá QoS thường được thực hiện ở đâu?
 A. Tại máy chủ dịch vụ
-*B. Tại bộ định tuyến (router) trên mạng
-C. Tất cả các phương án
+B. Tại bộ định tuyến (router) trên mạng
+*C. Tất cả các phương án
 D. Tại máy tính cá nhân của người dùng
 
 Câu 118. Mô hình dịch vụ phân biệt đặt yêu cầu gì đối với mạng?
@@ -2722,9 +2722,9 @@ B. Không cung cấp QoS
 D. QoS trong MPLS phụ thuộc vào băng thông
 
 Câu 120. Trong NS2, để thêm một Agent vào một Node, lệnh nào được sử dụng?
-A. node attach-agent agent
+*A. node attach-agent agent
 B. ns connect-agent node $agent
-*C. $ns attach-agent $node $agent
+C. $ns attach-agent $node $agent
 D. node add-agent agent
 
 Câu 121. Trong NS2, định nghĩa một đường truyền giữa hai nút mạng được thực hiện bằng lệnh nào?
