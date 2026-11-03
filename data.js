@@ -3648,8 +3648,8 @@ B. Từ MS đến PSTN
 D. Từ MS đến BSC
 
 Câu 28. Hệ thống GSM được chính thức đề xuất vào năm nào?
-*A. 1990
-B. 1991
+A. 1990
+*B. 1991
 C. 1992
 D. 1993
 
@@ -3737,10 +3737,10 @@ C. General Packet Radio Service
 D. Wireless Cellular Technology
 
 Câu 2. Đặc điểm cơ bản của hệ thống di động 4G
-*A. Hỗ trợ nhiều công nghệ vô tuyến khác nhau
+A. Hỗ trợ nhiều công nghệ vô tuyến khác nhau
 B. Không cần liên kết điều khiển
 C. Hỗ trợ tính di động tốt
-D. Cả ba phương án trên
+*D. Cả ba phương án trên
 
 Câu 3. Công nghệ 3G có gì khác với 2G?
 *A. Hỗ trợ nhiều dịch vụ hơn, như: email, web, ... Đóng gói cả tín hiệu Voice và data. Nâng cao, cải thiện tốc độ truyền dữ liệu
@@ -3888,8 +3888,8 @@ D. SC-FDMA
 
 Câu 27. Trong số nhận dạng thiết bị IMEI, TAC biểu thị:
 A. Mã vùng
-*B. Mã nhà sản xuất
-C. Mã kiểu dáng thiết bị
+B. Mã nhà sản xuất
+*C. Mã kiểu dáng thiết bị
 D. Mã tần số
 
 Câu 28. Điều gì là một trong những ưu điểm chính của mạng 5G so với các thế hệ trước?
@@ -3930,8 +3930,8 @@ C. LTE và 3G
 
 Câu 34. Trong mạng GSM, thiết bị nào điều khiển giao diện vô tuyến?
 A. MSC
-B. BSC
-*C. BTS
+*B. BSC
+C. BTS
 D. GMSC
 
 Câu 35. Mạng di động sử dụng công nghệ 1G, khi truyền dữ liệu thuộc loại gì?
