@@ -4,7 +4,7 @@ const subjectsData = [
         id: "mon_mang_khong_day",
         name: "Môn: Mạng Không Dây & Di Động",
         quizzes: [
-            {
+            { 
                 id: "mkd_c1",
                 title: "Bài 01: Trắc nghiệm Chương 1",
                 data: `
@@ -881,10 +881,10 @@ C. 200 MHz.
 D. 35 MHz.
 
 Câu 14. Tần số nào được sử dụng trong LTE để đạt tốc độ cao nhất?
-A. 2600 MHz
+*A. 2600 MHz
 B. 1800 MHz
 C. 900 MHz
-*D. Cả ba phương án
+D. Cả ba phương án
 
 Câu 15. GSM viết tắt bởi:
 *A. Global System for Mobile Communications
@@ -1055,8 +1055,8 @@ D. Không dùng cho 4G
 
 Câu 12. Kiến trúc 5G NR được chuẩn hoá bởi 3GPP vào thời gian nào?
 A. 12/2016
-B. 12/2017
-*C. 06/2018
+*B. 12/2017
+C. 06/2018
 D. 01/2020
 
 Câu 13. Tình huống sử dụng nào của 5G hướng tới truyền thông tương tác từ xa theo thời gian thực?
@@ -1192,10 +1192,10 @@ B. Hệ thống không dây thứ 4
 D. Công nghệ mạng không dây mới
 
 Câu 35. Độ rộng kênh truyền 5G có thể lên đến bao nhiêu?
-A. 100 MHz
+*A. 100 MHz
 B. 200 MHz
 C. Trên 500 MHz
-*D. 1 GHz
+D. 1 GHz
 
 Câu 36. Theo bảng so sánh, băng thông tối đa của 3GPP 5G NR là bao nhiêu?
 A. 100 MHz
