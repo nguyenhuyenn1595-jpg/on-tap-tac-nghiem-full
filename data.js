@@ -2167,8 +2167,8 @@ D. Modem
 
 Câu 24. Wireless Access Point có mấy chế độ hoạt động?
 A. 4
-B. 2
-*C. 3
+*B. 2
+C. 3
 D. 1
 
 Câu 25. Chuẩn IEEE 802.11 được phát hành năm nào?
@@ -2185,8 +2185,8 @@ D. Một loại cổng mạng
 
 Câu 27. Chuẩn 802.11g có phạm vi kết nối bao nhiêu mét?
 A. 30m
-B. 50m
-*C. 35m
+*B. 50m
+C. 35m
 D. 70m
 
 Câu 28. Chuẩn 802.11g được phát hành năm nào?
